@@ -5,6 +5,11 @@ import Navbar from "../components/Navbar";
 import Announcements from "../components/Announcements";
 import { Add, Remove } from "@mui/icons-material";
 import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
+import StripeCheckout from "react-stripe-checkout"
+import { Link } from 'react-router-dom';
+
+const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div`
   
@@ -148,9 +153,11 @@ font-weight: 600;
 `
 
 const Cart = () => {
-  return <Container>
+  const cart = useSelector((state) => state.cart);
+  return (
+    <Container>
+  <Announcements/>
         <Navbar/>
-        <Announcements/>
         <Wrapper>
           <Title>YOUR BAG</Title>
           <Top>
@@ -163,51 +170,38 @@ const Cart = () => {
           </Top>
           <Bottom>
             <Info>
+             {cart.products.map((product)=>(
               <Product>
                 <ProductDetails>
-                  <Image src="/images/popular-12.jpg"/>
+                  <Image src={product.img}/>
                   <Details>
-                    <ProductName><b>Product:</b>BOILER SUIT</ProductName>
-                    <ProductId><b>ID:</b>93813718293</ProductId>
-                    <ProductColor color="navy"/>
-                    <ProductSize><b>Size:</b>L</ProductSize>
+                    <ProductName>
+                    <b>Product:</b>{product.title}
+                    </ProductName>
+                    <ProductId><b>ID:</b>{product._id}
+                    </ProductId>
+                    <ProductColor color={product.color}/>
+                    <ProductSize><b>Size:</b>{product.size}</ProductSize>
                   </Details>
                 </ProductDetails>
                 <PriceDetails>
                 <ProductAmountContainer>
                 <Add/>
-                <ProductAmount>2</ProductAmount>
+                <ProductAmount>{product.quantity}</ProductAmount>
                 <Remove/>
                 </ProductAmountContainer>
-                <ProductPrice>₦10,000</ProductPrice>
+                <ProductPrice>₦{product.price*product.quantity}</ProductPrice>
                 </PriceDetails>
               </Product>
+              ))}
               <Hr/>
-              <Product>
-                <ProductDetails>
-                  <Image src="/images/popular-11.jpg"/>
-                  <Details>
-                    <ProductName><b>Product:</b>SKIRT</ProductName>
-                    <ProductId><b>ID:</b>93813718294</ProductId>
-                    <ProductColor color="navy"/>
-                    <ProductSize><b>Size:</b>M</ProductSize>
-                  </Details>
-                </ProductDetails>
-                <PriceDetails>
-                <ProductAmountContainer>
-                <Add/>
-                <ProductAmount>2</ProductAmount>
-                <Remove/>
-                </ProductAmountContainer>
-                <ProductPrice>₦5,000</ProductPrice>
-                </PriceDetails>
-              </Product>
+
             </Info>
             <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
             <SummaryItemText>Subtotal</SummaryItemText>
-            <SummaryItemPrice>₦15,000</SummaryItemPrice>
+            <SummaryItemPrice>₦{cart.total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
             <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -219,14 +213,17 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
             <SummaryItemText>Total</SummaryItemText>
-            <SummaryItemPrice>₦15,000</SummaryItemPrice>
+            <SummaryItemPrice>₦{cart.total}</SummaryItemPrice>
             </SummaryItem>
+            <Link to= "/checkout">
             <Button>CHECKOUT NOW</Button>
+            </Link>
             </Summary>
           </Bottom>
         </Wrapper>
         <Footer/>
-  </Container>;
+  </Container>
+  );
 };
 
 export default Cart;

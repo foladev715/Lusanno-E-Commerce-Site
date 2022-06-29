@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { mobile } from '../responsive';
+import { Link } from 'react-router-dom';
+
 
 const Container = styled.div`
 width: 100vw;
@@ -35,12 +37,17 @@ font-size: 12px;
 margin: 20px 0;
 `;
 const Button = styled.button`
-width: 40%;
 border: none;
-padding: 15px 20px;
+padding: 15px 40px;
 background-color: teal;
 color: white;
 cursor: pointer;
+`;
+
+const Buttons = styled.div`
+display: flex;
+justify-content: space-between;
+width: 100%;
 `;
 
 const Register = () => {
@@ -58,7 +65,18 @@ const Register = () => {
             <Agreement>
                 By creating an account, I consent to the processing of my personal data in accordance with the <b>PRIVACY POLICY</b>
             </Agreement>
+            <Buttons>
+            <Link to= "/redirected" style={{ textDecoration: "none"}}>
+
             <Button>CREATE</Button>
+            </Link>
+
+            <Link to= "/" style={{ textDecoration: "none"}}>
+            <Button>HOME</Button>
+            </Link>
+
+            </Buttons>
+
         </Form>
       </Wrapper>
     </Container>
